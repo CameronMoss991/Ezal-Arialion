@@ -1001,14 +1001,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6173588760568606523, guid: d10b2003eb9af6333ae6689eafb9f351, type: 3}
-      propertyPath: useSprintBar
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6173588760568606523, guid: d10b2003eb9af6333ae6689eafb9f351, type: 3}
-      propertyPath: unlimitedSprint
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8746010586134542417, guid: d10b2003eb9af6333ae6689eafb9f351, type: 3}
       propertyPath: m_RootOrder
       value: 0

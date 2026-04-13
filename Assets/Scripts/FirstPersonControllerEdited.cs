@@ -83,7 +83,7 @@ public class FirstPersonControllerEdited : MonoBehaviour
 
     // Internal Variables
     private CanvasGroup sprintBarCG;
-    private bool isSprinting = false;
+    public bool isSprinting = false; //changed to public
     private float sprintRemaining;
     private float sprintBarWidth;
     private float sprintBarHeight;
