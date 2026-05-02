@@ -66,7 +66,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -489.6, y: 280.11102}
+  m_AnchoredPosition: {x: -489.59998, y: 280.11102}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2120756332
@@ -943,3 +943,5 @@ MonoBehaviour:
   projectilePrefab: {fileID: 7857746127274602316, guid: e8b96fcbe864bcebfa910d4e9b626fdb, type: 3}
   spawnPoint: {fileID: 1021384140}
   fireRate: 0.5
+  damage: 25
+  range: 100
