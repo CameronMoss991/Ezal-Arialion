@@ -132,6 +132,10 @@ MonoBehaviour:
   speed: 40
   damage: 25
   lifetime: 3
+  hasPiercing: 0
+  hasExplosiveRounds: 0
+  explosionRadius: 4
+  explosionParticles: {fileID: 6640133387999792056, guid: 62b713475d96b25cf9d06fbf44ad6a3b, type: 3}
 --- !u!136 &7857746127274602289
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -140,7 +144,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7857746127274602316}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5130933
   m_Height: 2.0309973

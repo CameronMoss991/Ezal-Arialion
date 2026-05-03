@@ -1,34 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnDoors : MonoBehaviour
 {
-    public GameObject enemyPrefab;    // Drag your Enemy 1 Prefab here
-    public float spawnRate = 3.0f;    // Seconds between spawns
-    public int maxEnemies = 10;       // Prevent lag by capping enemy count
-
+    public GameObject enemyPrefab;    
     private float nextSpawnTime;
+
+    void Start()
+    {
+        // Still use the random offset so they don't sync up perfectly
+        nextSpawnTime = Time.time + Random.Range(0f, GameManager.Instance.startSpawnRate);
+    }
 
     void Update()
     {
-        // Don't spawn if the game is over
-        if (GameManager.Instance != null && GameManager.Instance.isGameOver) return;
+        if (GameManager.Instance == null || GameManager.Instance.isGameOver) return;
 
-        // Check if it's time to spawn and if we are under the limit
+        // 1. Get the difficulty from the clock
+        float difficulty = GameManager.Instance.GetDifficultyProgress();
+        // 2. READ values from the Global GameManager instead of local variables
+        float currentSpawnRate = Mathf.Lerp(GameManager.Instance.startSpawnRate, GameManager.Instance.endSpawnRate, difficulty);
+        int currentMaxEnemies = GameManager.Instance.startMaxEnemies + Mathf.RoundToInt((GameManager.Instance.endMaxEnemies - GameManager.Instance.startMaxEnemies) * difficulty);
+
+        // 3. Spawn Logic
         if (Time.time >= nextSpawnTime)
         {
-            // Only spawn if we haven't hit the cap
-            if (GameObject.FindGameObjectsWithTag("Enemy").Length < maxEnemies)
+            if (GameObject.FindGameObjectsWithTag("Enemy").Length < currentMaxEnemies)
             {
-                SpawnEnemy();
+                Instantiate(enemyPrefab, transform.position, Quaternion.identity);
             }
-            nextSpawnTime = Time.time + spawnRate;
+            nextSpawnTime = Time.time + currentSpawnRate + Random.Range(-0.1f, 0.1f);
         }
-    }
-
-    void SpawnEnemy()
-    {
-        Instantiate(enemyPrefab, transform.position, Quaternion.identity);
     }
 }

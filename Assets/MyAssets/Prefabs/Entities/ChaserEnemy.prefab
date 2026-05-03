@@ -198,6 +198,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: beadca0a12bc4aca9858c37bfd943942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseHealth: 100
+  baseScore: 10
   maxHealth: 100
   scoreValue: 10
   shieldPowerUpPrefab: {fileID: 0}

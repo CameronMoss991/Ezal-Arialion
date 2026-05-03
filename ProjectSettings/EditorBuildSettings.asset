@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Pyramid_Inside.unity
+    path: Assets/Scenes/MainMenu.unity
+    guid: ae963f3acb3586b7a90cc7b20682d6fc
+  - enabled: 1
+    path: Assets/Scenes/Colosseum.unity
     guid: 0a4b11e25da6ce84b88ea8846a851a7f
   m_configObjects: {}

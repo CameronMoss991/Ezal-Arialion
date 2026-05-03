@@ -4,21 +4,26 @@ public class EnergyPistol : MonoBehaviour
 {
     public GameObject projectilePrefab; 
     public Transform spawnPoint;
-    public float fireRate = 0.2f; // Faster firing
+    
+    [Header("Upgradable Stats")]
+    public float fireRate = 0.2f; 
     public float damage = 25f;
-    public float range = 100f;
+    public float range = 100f; // How far the bullet flies
+    public float projectileSpeed = 40f;
+
+    [Header("One-Time Upgrades")]
+    public bool isAutoFire = false;
+    public bool hasExplosiveRounds = false;
+    public bool hasPiercing = false;
     
     private float nextFireTime;
-    private Camera fpsCam;
-
-    void Start()
-    {
-        fpsCam = GetComponentInParent<Camera>();
-    }
 
     void Update()
     {
-        if (Input.GetButtonDown("Fire1") && Time.time >= nextFireTime)
+        // MAGIC TRICK: If auto-fire is true, use GetButton (hold). If false, use GetButtonDown (click).
+        bool isTryingToShoot = isAutoFire ? Input.GetButton("Fire1") : Input.GetButtonDown("Fire1");
+
+        if (isTryingToShoot && Time.time >= nextFireTime)
         {
             Shoot();
             nextFireTime = Time.time + fireRate;
@@ -27,19 +32,21 @@ public class EnergyPistol : MonoBehaviour
 
     void Shoot()
     {
-        // 1. VISUAL: Spawn the fast bolt
-        Instantiate(projectilePrefab, spawnPoint.position, spawnPoint.rotation);
-
-        // 2. LOGIC: Instant Raycast hit
-        RaycastHit hit;
-        // Shoot the ray from the center of the screen
-        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
+        // 1. Spawn the bullet
+        GameObject bullet = Instantiate(projectilePrefab, spawnPoint.position, spawnPoint.rotation);
+        
+        // 2. Pass the Pistol's stats into this specific bullet!
+        Projectile projScript = bullet.GetComponent<Projectile>();
+        if (projScript != null)
         {
-            if (hit.collider.CompareTag("Enemy"))
-            {
-                hit.collider.GetComponent<EnemyHealth>()?.TakeDamage(damage);
-                Debug.Log("Raycast Hit Enemy!");
-            }
+            projScript.damage = this.damage;
+            projScript.speed = this.projectileSpeed;
+            
+            // Calculate how long the bullet should live based on Range and Speed
+            projScript.lifetime = this.range / this.projectileSpeed; 
+            
+            projScript.hasPiercing = this.hasPiercing;
+            projScript.hasExplosiveRounds = this.hasExplosiveRounds;
         }
     }
 }

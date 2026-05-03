@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
-    [Header("Stats")]
-    public float maxHealth = 100f;
-    public int scoreValue = 10;
+    [Header("Base Stats")]
+    public float baseHealth = 100f;
+    public int baseScore = 10;
+    
+    [Header("Dynamic Stats (Do not edit)")]
+    public float maxHealth;
+    public int scoreValue;
     private float currentHealth;
     private Renderer enemyRenderer;
 
@@ -16,52 +20,49 @@ public class EnemyHealth : MonoBehaviour
 
     void Start()
     {
+        // 1. Check the time
+        float difficulty = GameManager.Instance.GetDifficultyProgress();
+        
+        // 2. Randomize Size (Later game = chance for much bigger enemies)
+        float sizeMultiplier = Random.Range(1.0f, 1.3f + (difficulty * 0.7f));
+        
+        // Scale the physical model (X, Y, Z)
+        transform.localScale = new Vector3(sizeMultiplier, sizeMultiplier, sizeMultiplier);
+
+        // 3. Set Health and Score based on Size AND Time
+        maxHealth = (baseHealth * sizeMultiplier) + (50f * difficulty);
+        scoreValue = Mathf.RoundToInt(baseScore * sizeMultiplier) + Mathf.RoundToInt(15 * difficulty);
+        
         currentHealth = maxHealth;
+
         enemyRenderer = GetComponent<Renderer>();
-        if (enemyRenderer == null)
-        {
-            enemyRenderer = GetComponentInChildren<Renderer>();
-        }
+        if (enemyRenderer == null) enemyRenderer = GetComponentInChildren<Renderer>();
+            
         UpdateVisuals();
     }
 
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        if (enemyRenderer != null)
-            UpdateVisuals();
-
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
+        if (enemyRenderer != null) UpdateVisuals();
+        if (currentHealth <= 0) Die();
     }
+
     void UpdateVisuals()
     {
         if (enemyRenderer == null) return;
-        // Calculate health as a percentage (0.0 to 1.0)
         float healthPercent = currentHealth / maxHealth;
-
-        // Lerp: At 1.0, it's Green. At 0.0, it's Red.
-        // As it drops, it will naturally turn Yellow/Orange.
         enemyRenderer.material.color = Color.Lerp(Color.red, Color.green, healthPercent);
     }
 
     void Die()
     {
-        // 1. Tell the GameManager to add score
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.AddScore(scoreValue);
-        }
-
-        // 2. Chance to drop a shield power-up
+        if (GameManager.Instance != null) GameManager.Instance.AddScore(scoreValue);
+        
         if (Random.value <= dropChance && shieldPowerUpPrefab != null)
         {
             Instantiate(shieldPowerUpPrefab, transform.position, Quaternion.identity);
         }
-
-        // 3. Remove enemy from scene
         Destroy(gameObject);
     }
 }
